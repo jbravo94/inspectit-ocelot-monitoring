@@ -1,0 +1,5 @@
+10141=influx/http.json
+9600=influx/jvm.json
+10143=influx/selfmonitoring.json
+10142=influx/servicegraph.json
+9601=influx/system.json

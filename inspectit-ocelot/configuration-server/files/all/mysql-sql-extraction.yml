@@ -1,0 +1,30 @@
+inspectit:
+  instrumentation:
+
+    scopes:
+      's_mysql_prepared_statement_execute':
+        type:
+          name: 'com.mysql.cj.jdbc.ClientPreparedStatement'
+        methods:
+          - name: 'execute'
+            matcher-mode: STARTS_WITH
+            
+    actions:
+      # Extracts the SQL from a PreparedStatement for HSQLDB
+      'a_mysql_prepared_statement_get_sql':
+        imports:
+          - 'com.mysql.cj.jdbc'
+        input:
+          _this: 'ClientPreparedStatement'
+          _class: 'Class'        
+        value-body: |
+          return _this.toString();
+    
+    rules:
+      'r_mysql_get_prep_statement_sql':
+        scopes:
+          's_mysql_prepared_statement_execute': true
+        exit:
+          'prepared_sql':
+            action: 'a_mysql_prepared_statement_get_sql'
+            only-if-null: 'prepared_sql'

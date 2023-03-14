@@ -1,0 +1,46 @@
+inspectit:
+  instrumentation:
+
+    scopes:
+      's_hikari_prepared_statement_execute':
+        type:
+          name: 'com.zaxxer.hikari.pool.HikariProxyPreparedStatement'
+        methods:
+          - name: 'execute'
+            matcher-mode: STARTS_WITH
+            
+    actions:
+      # Extracts the SQL from a PreparedStatement for HSQLDB
+      'a_hikari_prepared_statement_get_sql':
+        imports:
+          - 'com.zaxxer.hikari.pool'
+          - 'java.sql'
+          - 'java.lang.reflect'
+        input:
+          _this: 'HikariProxyPreparedStatement'
+          _class: 'Class'        
+        value-body: |
+          // Unwrap first proxied class from java assist
+          Class proxyPreparedStatementClass = _class.getSuperclass();
+          
+          // Unwrap extended class
+          Class proxyStatementClass = proxyPreparedStatementClass.getSuperclass();
+          
+          // Get actual preparedstatement from stored in delegate variable
+          Field delegateField = proxyStatementClass.getDeclaredField("delegate");
+          delegateField.setAccessible(true);
+          PreparedStatement preparedStatement = delegateField.get(_this);
+
+          // Get actual query (works for MySQL JDBC driver, most likely for PostgreSQL JDBC driver as well)
+          String sqlString = preparedStatement.toString();
+          
+          return sqlString;
+    
+    rules:
+      'r_hikari_get_prep_statement_sql':
+        scopes:
+          's_hikari_prepared_statement_execute': true
+        exit:
+          'prepared_sql':
+            action: 'a_hikari_prepared_statement_get_sql'
+            only-if-null: 'prepared_sql'
