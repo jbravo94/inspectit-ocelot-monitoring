@@ -2,6 +2,8 @@
 https://inspectit.github.io/inspectit-ocelot/docs/getting-started/docker-examples
 https://github.com/p404/jaeger-elasticsearch-compose/blob/master/docker-compose.yml
 https://gist.github.com/bocharovf/e19fa80f7b5f6b65db17249c91e79416
+https://github.com/jkehres/docker-compose-influxdb-grafana/blob/master/docker-compose.yml
+https://gist.github.com/ykarikos/06879cbb0d80828fe96445b504fa5b60
 
 # Elasticsearch Fix
 ```
