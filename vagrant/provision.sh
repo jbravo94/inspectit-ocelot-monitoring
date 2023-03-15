@@ -48,4 +48,9 @@ systemctl enable docker-compose@inspectit-ocelot.service
 # Prefetch docker images
 (cd /opt/inspectit-ocelot && docker compose pull)
 
+# Bootstrap
+(cd /opt/inspectit-ocelot && docker compose up -d --wait && sleep 30000)
+(cd /opt/inspectit-ocelot && docker compose down)
+(cd /opt/inspectit-ocelot && docker compose up -d --wait)
+
 poweroff
