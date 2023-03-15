@@ -14,6 +14,7 @@ umount /media/VBoxGuestAdditions
 rmdir /media/VBoxGuestAdditions
 
 # Docker Installation
+sysctl -w vm.max_map_count=262144
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -49,8 +50,8 @@ systemctl enable docker-compose@inspectit-ocelot.service
 (cd /opt/inspectit-ocelot && docker compose pull)
 
 # Bootstrap
-(cd /opt/inspectit-ocelot && docker compose up -d --wait && sleep 30000)
-(cd /opt/inspectit-ocelot && docker compose down)
 (cd /opt/inspectit-ocelot && docker compose up -d --wait)
+sleep 5000
+(cd /opt/inspectit-ocelot && docker compose down)
 
 poweroff

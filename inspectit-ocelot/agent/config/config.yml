@@ -1,0 +1,17 @@
+inspectit:
+  config:
+    http:
+      url: http://172.17.0.1:8090/api/v1/agent/configuration
+  service-name: tutorial-service
+  exporters:
+    tracing:
+      service-name: tutorial-service
+      jaeger:
+        enabled: ENABLED
+        protocol: http/thrift
+        endpoint: http://172.17.0.1:14268/api/traces
+    metrics:
+      service-name: tutorial-service
+      influx:
+        enabled: ENABLED
+        endpoint: http://172.17.0.1:8086
