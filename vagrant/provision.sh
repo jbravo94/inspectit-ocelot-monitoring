@@ -8,7 +8,7 @@ apt install -y libxt6 libxmu6 virtualbox-guest-utils virtualbox-guest-dkms
 wget http://download.virtualbox.org/virtualbox/6.1.38/VBoxGuestAdditions_6.1.38.iso
 mkdir /media/VBoxGuestAdditions
 mount -o loop,ro VBoxGuestAdditions_6.1.38.iso /media/VBoxGuestAdditions
-echo "yes" | sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
+echo "yes" | sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run || [ $? -eq 2 ]
 rm VBoxGuestAdditions_6.1.38.iso
 umount /media/VBoxGuestAdditions
 rmdir /media/VBoxGuestAdditions
@@ -51,7 +51,7 @@ systemctl enable docker-compose@inspectit-ocelot.service
 
 # Bootstrap
 (cd /opt/inspectit-ocelot && docker compose up -d --wait)
-sleep 5000
+sleep 5
 (cd /opt/inspectit-ocelot && docker compose down)
 
 poweroff
