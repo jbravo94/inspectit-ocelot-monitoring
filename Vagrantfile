@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
 
     # Box
     config.vm.box = "jhheinzl/inspectit-ocelot"
-    config.vm.box_version = "0.0.1"
+    config.vm.box_version = "0.0.2"
   
     # General
     config.vm.define "inspectit-ocelot"
