@@ -2,3 +2,8 @@
 
 * Install Virtualbox 6.1.38 and Vagrant 2.3.4
 * Run `vagrant up` 
+
+# TODOs:
+
+* Fix influxdb autostart
+* Autosetup Kibana
