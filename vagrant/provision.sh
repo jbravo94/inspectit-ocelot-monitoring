@@ -2,7 +2,7 @@
 
 # Install Packages
 apt update
-apt install -y virtualbox-guest-utils virtualbox-guest-dkms
+apt install -y libxt6 libxmu6 virtualbox-guest-utils virtualbox-guest-dkms 
 
 # Install Guest Additions
 wget http://download.virtualbox.org/virtualbox/6.1.38/VBoxGuestAdditions_6.1.38.iso
