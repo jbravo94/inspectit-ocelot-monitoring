@@ -9,4 +9,5 @@ Preinstalled Virtual Machine tested with a Spring Boot Application with MySQL
 
 # TODOs:
 
-* Autosetup Kibana
+* Fix influxdb auto bootstrap
+* Autosetup Kibana and Chronograf
