@@ -51,7 +51,7 @@ systemctl enable docker-compose@inspectit-ocelot.service
 
 # Bootstrap
 (cd /opt/inspectit-ocelot && docker compose up -d --wait)
-sleep 5
+sleep 30
 (cd /opt/inspectit-ocelot && docker compose down)
 
 poweroff
