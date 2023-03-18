@@ -8,7 +8,7 @@ Tested with a Spring Boot Application with MySQL.
 ## Advantages
 
 * The inspectIT Ocelot agent uses Java byte-code manipulation to set up the OpenCensus instrumentation library with zero-configuration and requires no source-code changes
-* OpenAPM Landscape Tools Used
+* Using best of breed OpenAPM Landscape Tools
 
 ## Setup
 
