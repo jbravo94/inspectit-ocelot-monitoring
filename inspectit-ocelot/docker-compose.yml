@@ -1,6 +1,21 @@
 version: '3'
 services:
 
+  nginx:
+    image: nginx:1.23.0
+    container_name: nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 10.0.2.15:16686:16686
+      - 10.0.2.15:8090:8090
+      - 10.0.2.15:8085:8085
+      - 10.0.2.15:8086:8086
+      - 10.0.2.15:8888:8888
+      - 10.0.2.15:5601:5601
+      - 10.0.2.15:14268:14268
+      - 10.0.2.15:3000:3000
+
   ocelot-config-server:
     image: inspectit/inspectit-ocelot-configurationserver:2.4.1
     container_name: ocelot-config-server
@@ -14,7 +29,7 @@ services:
     volumes:
       - ./configuration-server:/configuration-server
     ports:
-      - 8090:8090
+      - 127.0.0.1:8090:8090
 
   agent:
     image: inspectit/inspectit-ocelot-agent:2.4.1
@@ -40,7 +55,7 @@ services:
     volumes:
       - ./eum-server/data:/eum-server
     ports:
-      - 8085:8085
+      - 127.0.0.1:8085:8085
 
   influxdb:
     image: influxdb:1.8.10
@@ -59,7 +74,7 @@ services:
       - ./influx/continous-queries.iql:/docker-entrypoint-initdb.d/continous-queries.iql
       - ./influx/data:/var/lib/influxdb
     ports:
-      - 8086:8086
+      - 127.0.0.1:8086:8086
 
   chronograf:
     image: chronograf:1.8.10
@@ -68,15 +83,15 @@ services:
     environment:
       - INFLUXDB_URL=http://influxdb:8086
     ports:
-      - 8888:8888
+      - 127.0.0.1:8888:8888
     volumes:
       - ./chronograf/data:/var/lib/chronograf
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.1
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
     restart: on-failure
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
@@ -86,7 +101,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.7.1
     ports:
-      - "5601:5601"
+      - 127.0.0.1:5601:5601
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     depends_on:
@@ -95,11 +110,12 @@ services:
   jaeger-collector:
     image: jaegertracing/jaeger-collector:1.11.0
     hostname: jaeger-collector
+    container_name: jaeger-collector
     ports:
-      - "14269:14269"
-      - "14268:14268"
-      - "14267:14267"
-      - "9411:9411"
+      - 127.0.0.1:14269:14269
+      - 127.0.0.1:14268:14268
+      - 127.0.0.1:14267:14267
+      - 127.0.0.1:9411:9411
     restart: on-failure
     environment:
       LOG_LEVEL: "info"
@@ -129,8 +145,8 @@ services:
       SPAN_STORAGE_TYPE: "elasticsearch"
       no_proxy: "localhost"
     ports:
-      - "16686:16686"
-      - "16687:16687"
+      - 127.0.0.1:16686:16686
+      - 127.0.0.1:16687:16687
     restart: on-failure
     command: [
       "--es.server-urls=http://elasticsearch:9200",
@@ -152,12 +168,12 @@ services:
       - ./grafana/provisioning/influxdb:/usr/share/grafana/custom/
       - ./grafana/provisioning/home-dashboard/home.json:/usr/share/grafana/public/dashboards/home.json
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
 
   loki:
     image: grafana/loki:2.5.0
     ports:
-      - "3100:3100"
+      - 127.0.0.1:3100:3100
     command: -config.file=/etc/loki/local-config.yaml
 
   promtail:

@@ -3,6 +3,7 @@ https://inspectit.github.io/inspectit-ocelot/docs/getting-started/docker-example
 https://github.com/p404/jaeger-elasticsearch-compose/blob/master/docker-compose.yml
 https://gist.github.com/bocharovf/e19fa80f7b5f6b65db17249c91e79416
 https://github.com/jkehres/docker-compose-influxdb-grafana/blob/master/docker-compose.yml
+https://gist.github.com/ykarikos/06879cbb0d80828fe96445b504fa5b60
 
 # Elasticsearch Fix
 ```
@@ -34,3 +35,6 @@ Time: startTimeMillis
 </body>
 </html>
 ```
+
+openssl req -subj '/CN=inspectit-ocelot' -x509 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 365
+keytool -import -trustcacerts -alias inspectit-ocelot -keystore truststore.jks -storeType JKS -storepass inspectit-ocelot -file cert.pem
