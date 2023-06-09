@@ -30,8 +30,8 @@ Following command generates a certificate which is valid for 25 years with defau
 
 ## Packaging
 
-* Clean not necessary files with `sudo git clean -Xdf`
-* Package with `vagrant provision`
+* Run `cd vagrant && ./setup.sh`
+* Package with `./package.sh`
 
 ## Open TODOs:
 
