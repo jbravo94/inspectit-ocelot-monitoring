@@ -23,6 +23,11 @@ Tested with a Spring Boot Application with MySQL.
 
 This architecture excludes the visualization of the inspectIT Ocelot EUM capabilities.
 
+## Self-Signed Certificate Generation
+
+Following command generates a certificate which is valid for 25 years with default parameters:
+`openssl req -x509 -nodes -days 9125 -newkey rsa:4096 -keyout key.pem -out cert.pem -subj "/C=/ST=/L=/O=/CN=localhost"`
+
 ## Open TODOs:
 
 * Fix influxdb auto bootstrap

@@ -34,3 +34,7 @@
 **/configuration-server/users.db
 
 .vagrant/
+
+inspectit-ocelot/chronograf/
+inspectit-ocelot/elasticsearch/
+inspectit-ocelot/influx/

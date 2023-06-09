@@ -7,18 +7,22 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     ports:
-      - 10.0.2.15:16686:16686
-      - 10.0.2.15:8090:8090
-      - 10.0.2.15:8085:8085
-      - 10.0.2.15:8086:8086
-      - 10.0.2.15:8888:8888
-      - 10.0.2.15:5601:5601
-      - 10.0.2.15:14268:14268
-      - 10.0.2.15:3000:3000
+      - 16686:16686
+      - 8090:8090
+      - 8085:8085
+      - 8086:8086
+      - 8888:8888
+      - 5601:5601
+      - 14268:14268
+      - 3000:3000
+    networks:
+      - inspectit
+    restart: always
 
   ocelot-config-server:
     image: inspectit/inspectit-ocelot-configurationserver:2.4.1
     container_name: ocelot-config-server
+    hostname: ocelot-config-server
     deploy:
       resources:
         limits:
@@ -28,8 +32,10 @@ services:
       - INSPECTIT_CONFIG_SERVER_DEFAULT_USER_PASSWORD=demo
     volumes:
       - ./configuration-server:/configuration-server
-    ports:
-      - 127.0.0.1:8090:8090
+    expose:
+      - 8090
+    networks:
+      - inspectit
 
   agent:
     image: inspectit/inspectit-ocelot-agent:2.4.1
@@ -40,10 +46,13 @@ services:
           memory: 128M
     volumes:
       - ./agent:/agent
+    networks:
+      - inspectit
 
   ocelot-eum-server:
     image: inspectit/inspectit-ocelot-eum-server:2.4.0
     container_name: ocelot-eum-server
+    hostname: ocelot-eum-server
     environment:
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_URL=http://influxdb:8086
       - INSPECTIT_EUM_SERVER_EXPORTERS_METRICS_INFLUX_DATABASE=inspectit_eum
@@ -54,8 +63,10 @@ services:
           memory: 256M
     volumes:
       - ./eum-server/data:/eum-server
-    ports:
-      - 127.0.0.1:8085:8085
+    expose:
+      - 8085
+    networks:
+      - inspectit
 
   influxdb:
     image: influxdb:1.8.10
@@ -73,8 +84,10 @@ services:
     volumes:
       - ./influx/continous-queries.iql:/docker-entrypoint-initdb.d/continous-queries.iql
       - ./influx/data:/var/lib/influxdb
-    ports:
-      - 127.0.0.1:8086:8086
+    expose:
+      - 8086
+    networks:
+      - inspectit
 
   chronograf:
     image: chronograf:1.8.10
@@ -82,40 +95,46 @@ services:
       - influxdb
     environment:
       - INFLUXDB_URL=http://influxdb:8086
-    ports:
-      - 127.0.0.1:8888:8888
+    expose:
+      - 8888
     volumes:
       - ./chronograf/data:/var/lib/chronograf
+    networks:
+      - inspectit
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.1
-    ports:
-      - 127.0.0.1:9200:9200
-      - 127.0.0.1:9300:9300
+    expose:
+      - 9200
+      - 9300
     restart: on-failure
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     volumes:
       - ./elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - inspectit
 
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.7.1
-    ports:
-      - 127.0.0.1:5601:5601
+    expose:
+      - 5601
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     depends_on:
-    - elasticsearch
+      - elasticsearch
+    networks:
+      - inspectit
 
   jaeger-collector:
     image: jaegertracing/jaeger-collector:1.11.0
     hostname: jaeger-collector
     container_name: jaeger-collector
-    ports:
-      - 127.0.0.1:14269:14269
-      - 127.0.0.1:14268:14268
-      - 127.0.0.1:14267:14267
-      - 127.0.0.1:9411:9411
+    expose:
+      - 14269
+      - 14268
+      - 14267
+      - 9411
     restart: on-failure
     environment:
       LOG_LEVEL: "info"
@@ -123,30 +142,34 @@ services:
       ES_SERVER_URLS: "http://elasticsearch:9200"
     depends_on:
       - elasticsearch
+    networks:
+      - inspectit
 
   jaeger-agent:
     image: jaegertracing/jaeger-agent:1.11.0
     hostname: jaeger-agent
     command: ["--collector.host-port=jaeger-collector:14267"]
-    ports:
-      - "5775:5775/udp"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
+    expose:
+      - 5775
+      - 6831
+      - 6832
+      - 5778
     restart: on-failure
     environment:
       SPAN_STORAGE_TYPE: "elasticsearch"
     depends_on:
       - jaeger-collector
+    networks:
+      - inspectit
 
   jaeger-query:
     image: jaegertracing/jaeger-query:1.11.0
     environment:
       SPAN_STORAGE_TYPE: "elasticsearch"
       no_proxy: "localhost"
-    ports:
-      - 127.0.0.1:16686:16686
-      - 127.0.0.1:16687:16687
+    expose:
+      - 16686
+      - 16687
     restart: on-failure
     command: [
       "--es.server-urls=http://elasticsearch:9200",
@@ -155,6 +178,9 @@ services:
     ]
     depends_on:
       - jaeger-agent
+    networks:
+      - inspectit
+    hostname: jaeger-query
 
   grafana:
     image: grafana/grafana:9.0.2
@@ -167,17 +193,26 @@ services:
     volumes:
       - ./grafana/provisioning/influxdb:/usr/share/grafana/custom/
       - ./grafana/provisioning/home-dashboard/home.json:/usr/share/grafana/public/dashboards/home.json
-    ports:
-      - 127.0.0.1:3000:3000
+    expose:
+      - 3000
+    networks:
+      - inspectit
 
   loki:
     image: grafana/loki:2.5.0
-    ports:
-      - 127.0.0.1:3100:3100
+    expose:
+      - 3100
     command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - inspectit
 
   promtail:
     image: grafana/promtail:2.5.0
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
+    networks:
+      - inspectit
+
+networks:
+  inspectit:
