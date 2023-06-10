@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
 
     # Box
     config.vm.box = "jhheinzl/inspectit-ocelot"
-    config.vm.box_version = "0.0.2"
+    config.vm.box_version = "0.0.4"
   
     # General
     config.vm.define "inspectit-ocelot"
@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     # Hardware
     config.vm.provider :virtualbox
     config.vm.provider "virtualbox" do |vb|
-      vb.cpus = 2
+      vb.cpus = 4
       vb.memory = 4096
       vb.name = "inspectit-ocelot"
     end
@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
     config.vm.network "forwarded_port", guest: 16686, host: 16686, id: "jaeger-query"
     config.vm.network "forwarded_port", guest: 5601, host: 5601, id: "kibana"
     config.vm.network "forwarded_port", guest: 3000, host: 3000, id: "grafana"
-  
+    config.vm.network "forwarded_port", guest: 443, host: 8443, id: "homepage"
+
   end
   
