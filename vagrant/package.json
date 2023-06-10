@@ -2,7 +2,7 @@
     "name": "jhheinzl/inspectit-ocelot",
     "versions": [
         {
-            "version": "0.0.2",
+            "version": "0.0.3",
             "providers": [
                 {
                     "name": "virtualbox",
