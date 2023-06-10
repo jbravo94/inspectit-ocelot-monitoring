@@ -38,3 +38,6 @@
 inspectit-ocelot/chronograf/
 inspectit-ocelot/elasticsearch/
 inspectit-ocelot/influx/
+
+package.box
+package.crc
