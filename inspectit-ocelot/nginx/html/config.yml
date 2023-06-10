@@ -1,0 +1,17 @@
+inspectit:
+  config:
+    http:
+      url: https://inspectit-ocelot:8090/api/v1/agent/configuration
+  service-name: example-service
+  exporters:
+    tracing:
+      service-name: example-service
+      jaeger:
+        enabled: ENABLED
+        protocol: http/thrift
+        endpoint: https://inspectit-ocelot:14268/api/traces
+    metrics:
+      service-name: example-service
+      influx:
+        enabled: ENABLED
+        endpoint: https://inspectit-ocelot:8086
