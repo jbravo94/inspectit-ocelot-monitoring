@@ -25,8 +25,11 @@ This architecture excludes the visualization of the inspectIT Ocelot EUM capabil
 
 ## Self-Signed Certificate Generation
 
-Following command generates a certificate which is valid for 25 years with default parameters:
-`openssl req -x509 -nodes -days 9125 -newkey rsa:4096 -keyout key.pem -out cert.pem -subj "/C=/ST=/L=/O=/CN=localhost"`
+* Following command generates a certificate which is valid for 25 years with default parameters:\
+```openssl req -x509 -nodes -days 9125 -newkey rsa:4096 -keyout key.pem -out cert.pem -subj "/C=/ST=/L=/O=/CN=inspectit-ocelot"```
+
+* Add certificate to cacerts in application jre where agent is used:\
+```keytool -import -file cert.pem -keystore cacerts -alias "inspectit-ocelot" -storepass changeit -noprompt```
 
 ## Packaging
 
