@@ -1,15 +1,3 @@
-- name: "Gateway"
-  sources:
-  - "/gateway"
-  - "/all"
-  attributes:
-    service: "api-gateway"
-- name: "Services"
-  sources:
-  - "/services"
-  - "/all"
-  attributes:
-    service: ".*-service"
 - name: "Default Mapping"
   sources:
   - "/all"

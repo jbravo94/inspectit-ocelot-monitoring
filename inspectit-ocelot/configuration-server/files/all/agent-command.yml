@@ -1,4 +1,4 @@
 inspectit:
   agent-commands:
     enabled: true
-    url: http://172.17.0.1:8090/api/v1/agent/command
+    url: https://inspectit-ocelot:8090/api/v1/agent/command
