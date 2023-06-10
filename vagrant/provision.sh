@@ -49,9 +49,13 @@ systemctl enable docker-compose@inspectit-ocelot.service
 # Prefetch docker images
 (cd /opt/inspectit-ocelot && docker compose pull)
 
-# Bootstrap
+# Default Bootstrap
 (cd /opt/inspectit-ocelot && docker compose up -d --wait)
 sleep 30
-(cd /opt/inspectit-ocelot && docker compose down)
 
+# Custom Bootstrap
+(cd /opt/inspectit-ocelot/kibana && ./setup.sh)
+sleep 3
+
+(cd /opt/inspectit-ocelot && docker compose down)
 poweroff
